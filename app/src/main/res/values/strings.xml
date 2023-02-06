@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Weather Forecast App</string>
+    <string name="title_main_activity">Weather Forecast</string>
+    <string name="error_generic_message">Generic error message</string>
+    <string name="no_internet_connection_available">There\'s no internet connection available.</string>
+    <string name="general_retry">Retry</string>
+</resources>
