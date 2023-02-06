@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
+import com.orafaelsc.fairetest.R
+import com.orafaelsc.fairetest.commom.extensions.isConnected
 import com.orafaelsc.fairetest.databinding.FragmentMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -23,7 +26,11 @@ class ForecastWeatherFragment : Fragment() {
             setupView()
         }.also {
             binding = it
-            viewModel.getForecast()
+            if (context?.isConnected() == true) {
+                viewModel.getForecast()
+            } else {
+                showDisconnectedWarning()
+            }
         }.root
 
     @Override
@@ -34,6 +41,18 @@ class ForecastWeatherFragment : Fragment() {
 
     private fun setupView() {
 //        TODO("Not yet implemented")
+    }
+
+    private fun showDisconnectedWarning() {
+        Snackbar.make(
+            requireActivity().findViewById(android.R.id.content),
+            R.string.no_internet_connection_available,
+            Snackbar.LENGTH_INDEFINITE
+        ).setAction(R.string.general_retry) {
+            if (context?.isConnected() == true) {
+                viewModel.getForecast()
+            }
+        }.show()
     }
 
     companion object {
