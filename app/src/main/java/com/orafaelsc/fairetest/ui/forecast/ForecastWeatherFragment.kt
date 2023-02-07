@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.orafaelsc.fairetest.R
 import com.orafaelsc.fairetest.commom.extensions.isConnected
+import com.orafaelsc.fairetest.commom.extensions.setupObserverOnCreated
 import com.orafaelsc.fairetest.databinding.FragmentMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -23,11 +24,12 @@ class ForecastWeatherFragment : Fragment() {
     ): View = FragmentMainBinding
         .inflate(inflater, container, false)
         .apply {
-            setupView()
+            binding = this
         }.also {
-            binding = it
+            setupView()
+            initDataObserver()
             if (context?.isConnected() == true) {
-                viewModel.getForecast()
+                viewModel.getForecastData()
             } else {
                 showDisconnectedWarning()
             }
@@ -39,8 +41,22 @@ class ForecastWeatherFragment : Fragment() {
         binding = null
     }
 
+    private fun initDataObserver() {
+        setupObserverOnCreated(viewModel.forecastViewObject() to ::forecastViewObjectObserver)
+    }
+
+    private fun forecastViewObjectObserver(viewObject: ForecastViewObject) {
+        binding?.run {
+            buttonGetForecast.text = viewObject.cityName
+        }
+    }
+
     private fun setupView() {
-//        TODO("Not yet implemented")
+        binding?.run {
+            buttonGetForecast.setOnClickListener {
+                viewModel.getForecastData()
+            }
+        }
     }
 
     private fun showDisconnectedWarning() {
@@ -50,7 +66,9 @@ class ForecastWeatherFragment : Fragment() {
             Snackbar.LENGTH_INDEFINITE
         ).setAction(R.string.general_retry) {
             if (context?.isConnected() == true) {
-                viewModel.getForecast()
+                viewModel.getForecastData()
+            } else {
+                showDisconnectedWarning()
             }
         }.show()
     }

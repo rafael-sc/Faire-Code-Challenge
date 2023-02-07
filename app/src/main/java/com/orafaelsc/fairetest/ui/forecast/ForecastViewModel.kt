@@ -14,13 +14,13 @@ class ForecastViewModel(
     dispatcherProvider: CoroutineDispatcherProvider
 ) : BaseViewModel(dispatcherProvider) {
 
-    private val forecast = MutableSharedFlow<Any>()
-    fun forecast(): SharedFlow<Any> = forecast
+    private val forecastViewObject = MutableSharedFlow<ForecastViewObject>()
+    fun forecastViewObject(): SharedFlow<ForecastViewObject> = forecastViewObject
 
-    fun getForecast() {
+    fun getForecastData() {
         viewModelScope.launch(mainExceptionHandler) {
             withContext(ioExceptionHandler) {
-                forecast.emit(
+                forecastViewObject.emit(
                     weatherUseCase.getWeatherForecast("4418")
                 )
             }

@@ -16,9 +16,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary true
-        }
     }
 
     buildTypes {
@@ -71,5 +68,26 @@ dependencies {
     implementation"io.insert-koin:koin-core:$koin_version"
 
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
+    // moshi
+    implementation"com.squareup.moshi:moshi:$moshi_version"
+    implementation"com.squareup.moshi:moshi-kotlin:$moshi_version"
+    implementation"com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+    kapt"com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+
+    //coil
+    implementation "io.coil-kt:coil:2.2.2"
+
+    //Mockk
+    testImplementation "io.mockk:mockk:1.13.3"
+    androidTestImplementation "io.mockk:mockk-android:1.13.3"
+    //For runBlockingTest, CoroutineDispatcher etc.
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
+    //for better assertions
+    testImplementation "io.kotlintest:kotlintest-assertions:3.4.0"
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
+
+    testImplementation "junit:junit:4.13.2"
+    androidTestImplementation "androidx.test.ext:junit:1.1.5"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
 
 }
