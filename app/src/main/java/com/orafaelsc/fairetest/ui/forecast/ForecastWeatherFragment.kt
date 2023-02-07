@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.google.android.material.snackbar.Snackbar
 import com.orafaelsc.fairetest.R
 import com.orafaelsc.fairetest.commom.extensions.isConnected
@@ -47,15 +49,20 @@ class ForecastWeatherFragment : Fragment() {
 
     private fun forecastViewObjectObserver(viewObject: ForecastViewObject) {
         binding?.run {
-            buttonGetForecast.text = viewObject.cityName
+            textViewCity.text = viewObject.cityName
+            textViewActualTemp.text = viewObject.actualTemp
+            textViewHigherTemp.text = viewObject.higherTemp
+            textViewLowerTemp.text = viewObject.lowerTemp
+
+            imageWeather.load(viewObject.imageUrl) {
+                crossfade(true)
+                transformations(CircleCropTransformation())
+            }
         }
     }
 
     private fun setupView() {
         binding?.run {
-            buttonGetForecast.setOnClickListener {
-                viewModel.getForecastData()
-            }
         }
     }
 
