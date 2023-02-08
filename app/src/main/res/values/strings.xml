@@ -2,6 +2,8 @@
     <string name="app_name">Weather Forecast App</string>
     <string name="title_main_activity">Weather Forecast</string>
     <string name="error_generic_message">Generic error message</string>
+    <string name="error_unable_to_load_data">Unable to load data this time, please try again.</string>
+    <string name="error_unable_to_load_consolidate_weather">Unable to load data for this city, please try again.</string>
     <string name="no_internet_connection_available">There\'s no internet connection available.</string>
     <string name="general_retry">Retry</string>
     <string name="base_image_url">https://cdn.faire.com/static/mobile-take-home/icons/%1$s.png</string>

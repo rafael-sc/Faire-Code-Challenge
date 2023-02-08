@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.orafaelsc.fairetest.R
+import com.orafaelsc.fairetest.commom.exceptions.ApiException
 import com.orafaelsc.fairetest.commom.extensions.isConnected
 import com.orafaelsc.fairetest.commom.extensions.setupObserverOnCreated
 import com.orafaelsc.fairetest.databinding.FragmentMainBinding
@@ -52,7 +54,37 @@ class ForecastWeatherFragment : Fragment() {
     }
 
     private fun initDataObserver() {
-        setupObserverOnCreated(viewModel.forecastViewObject() to ::forecastViewObjectObserver)
+        viewModel.run {
+            setupObserverOnCreated(forecastViewObject() to ::forecastViewObjectObserver)
+            setupObserverOnCreated(loadingState() to ::loadingStateObserver)
+            setupObserverOnCreated(errorState() to ::errorStateObserver)
+        }
+    }
+
+    private fun errorStateObserver(exception: Throwable) {
+        val message = if (exception is ApiException) {
+            when (exception) {
+                is ApiException.UnableToGetConsolidateWeatherException -> resources.getString(R.string.error_unable_to_load_consolidate_weather)
+                is ApiException.UnableToGetWeatherForecastException -> resources.getString(R.string.error_unable_to_load_data)
+            }
+        } else {
+            resources.getString(R.string.error_generic_message)
+        }
+
+        Snackbar.make(
+            requireActivity().findViewById(android.R.id.content),
+            message,
+            Snackbar.LENGTH_INDEFINITE
+        ).setAction(R.string.general_retry) {
+            viewModel.getForecastData()
+        }.show()
+    }
+
+    private fun loadingStateObserver(isLoading: Boolean) {
+        binding?.run {
+            recyclerViewList.isVisible = isLoading.not()
+            lottieViewLoading.isVisible = isLoading
+        }
     }
 
     private fun forecastViewObjectObserver(viewObject: ForecastViewObject) {
