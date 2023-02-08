@@ -19,7 +19,6 @@ import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.ResponseBody
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Before
 import org.junit.Test
@@ -36,9 +35,6 @@ class WeatherUseCaseTest {
 
     @MockK
     private lateinit var resourceProvider: ResourceProvider
-
-    @MockK
-    private lateinit var errorResponse: ResponseBody
 
     @Before
     fun setup() {
