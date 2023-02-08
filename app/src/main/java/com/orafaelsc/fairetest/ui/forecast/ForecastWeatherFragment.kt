@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import coil.load
-import coil.transform.CircleCropTransformation
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.orafaelsc.fairetest.R
 import com.orafaelsc.fairetest.commom.extensions.isConnected
@@ -18,6 +19,13 @@ class ForecastWeatherFragment : Fragment() {
 
     private val viewModel: ForecastViewModel by viewModel()
     private var binding: FragmentMainBinding? = null
+    private val forecastAdapter: ForecastAdapter by lazy {
+        ForecastAdapter {
+            context?.run {
+                Toast.makeText(this, "item $it clicked", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,13 +58,10 @@ class ForecastWeatherFragment : Fragment() {
     private fun forecastViewObjectObserver(viewObject: ForecastViewObject) {
         binding?.run {
             textViewCity.text = viewObject.cityName
-            textViewActualTemp.text = viewObject.actualTemp
-            textViewHigherTemp.text = viewObject.higherTemp
-            textViewLowerTemp.text = viewObject.lowerTemp
-
-            imageWeather.load(viewObject.imageUrl) {
-                crossfade(true)
-                transformations(CircleCropTransformation())
+            forecastAdapter.setItems(viewObject.weatherList)
+            recyclerViewList.run {
+                layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+                adapter = forecastAdapter
             }
         }
     }
