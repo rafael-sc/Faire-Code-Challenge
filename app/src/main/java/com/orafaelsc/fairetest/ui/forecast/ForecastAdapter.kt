@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
+import com.orafaelsc.fairetest.R
 import com.orafaelsc.fairetest.commom.AdapterItemClickListener
 import com.orafaelsc.fairetest.databinding.WeatherItemBinding
 
@@ -46,6 +47,7 @@ class ForecastAdapter(
                 imageWeather.run {
                     load(item.imageUrl) {
                         crossfade(true)
+                        placeholder(R.drawable.loading)
                         transformations(CircleCropTransformation())
                     }
                     contentDescription = item.stateName
